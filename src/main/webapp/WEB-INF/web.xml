@@ -1,0 +1,96 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+  <display-name>vueTest</display-name>
+
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+  <!--处理POST提交乱码的问题-->
+<!--  <filter>-->
+<!--    <filter-name>EncodeFilter</filter-name>-->
+<!--    <filter-class>com.qiu.filter.EncodingFilter</filter-class>-->
+<!--    <init-param>-->
+<!--      <param-name>Encoding</param-name>-->
+<!--      <param-value>UTF-8</param-value>-->
+<!--    </init-param>-->
+<!--  </filter>-->
+<!--  <filter-mapping>-->
+<!--    <filter-name>EncodeFilter</filter-name>-->
+<!--    <url-pattern>/*</url-pattern>-->
+<!--  </filter-mapping>-->
+<!--跨域过滤器-->
+  <filter>
+  <filter-name>corsFilter</filter-name>
+  <filter-class>com.qiu.filter.CorsFilter</filter-class>
+</filter>
+  <filter-mapping>
+    <filter-name>corsFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- Spring字符集过滤器 -->
+  <filter>
+    <filter-name>SpringEncodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceRequestEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceResponseEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>SpringEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- 添加对springmvc的支持,DispatcherServlet是一个负责调度工作的servlet，控制器 -->
+  <servlet>
+    <servlet-name>springmvc</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!-- 指定配置文件位置和名称 如果不设置,默认找/WEB-INF/<servlet-name>-servlet.xml -->
+    <init-param>
+      <!--Spring Web MVC框架将加载“classpath:spring-servlet-config.xml”
+      来进行初始化上下文而不是“/WEB-INF/[servlet名字]-servlet.xml
+      param-name表示传入参数，key+value，可通过config.getInitParameter来获取 -->
+      <param-name>contextConfigLocation</param-name>
+      <!--使用Spring-mvc.xml作为配置文件，详情原理可看DispatcherServlet原理 -->
+      <param-value>classpath:springmvc.xml</param-value>
+    </init-param>
+    <!-- 启动spring容器时初始化该servlet -->
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <!-- 过虑所有，servlet-mapping表示配置其 URL，配置了才能响应用户请求-->
+  <servlet-mapping>
+    <servlet-name>springmvc</servlet-name>
+    <!-- servlet的映射地址，表示向/的请求会发送的此servlet来处理
+    （没有找到更加匹配的Servlet的时候，用此servlet）可百度servlet的映射路径找路径写法
+    设置成/可以实现网站伪静态，设置成*.do则没这样的效果 -->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+
+</web-app>
