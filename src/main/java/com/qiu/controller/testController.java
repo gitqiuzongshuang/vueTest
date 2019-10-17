@@ -25,8 +25,6 @@ testService testService;
     @ResponseBody
     public String tes(String name,HttpServletRequest request,HttpServletResponse response)throws IOException{
         String name1=new String(name.getBytes("iso-8859-1"),"utf-8");
-        System.out.println(name1);
-        System.out.println(name);
         return name;
     }
     @RequestMapping(value = "/add.do",produces = "text/plain;charset=UTF-8")
@@ -113,5 +111,7 @@ testService testService;
                 int r=testService.edit(p);
             }
         }
-        return "success";    }
+        return "success";
+    }
+
 }
